@@ -127,6 +127,42 @@ const editBookingStatus = async (
     return await findBookingById(id_booking);
 };
 
+const cancelBooking = async (
+    id_booking,
+    id_user
+) => {
+
+    const booking = await findBookingById(id_booking);
+
+    if (!booking) {
+        throw new ApiError(
+            "Booking tidak ditemukan",
+            404
+        );
+    }
+
+    if (booking.id_user !== id_user) {
+        throw new ApiError(
+            "Anda tidak memiliki akses ke booking ini",
+            403
+        );
+    }
+
+    if (booking.status_booking !== "pending") {
+        throw new ApiError(
+            "Hanya booking dengan status pending yang dapat dibatalkan",
+            400
+        );
+    }
+
+    await updateBookingStatus(
+        id_booking,
+        "dibatalkan"
+    );
+
+    return await findBookingById(id_booking);
+};
+
 const removeBooking = async (id_booking) => {
 
     const booking = await findBookingById(id_booking);
@@ -149,5 +185,6 @@ export {
     getBooking,
     addBooking,
     editBookingStatus,
+    cancelBooking,
     removeBooking
 };

@@ -35,7 +35,7 @@ function Login() {
             if (response.data.user.role === "admin") {
                 navigate("/admin");
             } else {
-                navigate("/customer");
+                navigate("/customer/movies");
             }
         } catch (error) {
             toast.error(

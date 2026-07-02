@@ -130,6 +130,30 @@ router.put(
 
 /**
  * @swagger
+ * /api/bookings/{id}/cancel:
+ *   put:
+ *     summary: Customer membatalkan booking
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Booking berhasil dibatalkan
+ */
+router.put(
+    "/:id/cancel",
+    roleMiddleware("customer"),
+    bookingController.cancel
+);
+
+/**
+ * @swagger
  * /api/bookings/{id}:
  *   delete:
  *     summary: Menghapus booking

@@ -4,10 +4,16 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
 import AdminDashboard from "../pages/admin/Dashboard";
-import CustomerDashboard from "../pages/customer/Dashboard";
 
 import AdminLayout from "../layouts/AdminLayout";
 import CustomerLayout from "../layouts/CustomerLayout";
+
+import Users from "../pages/admin/Users";
+import Movies from "../pages/admin/Movies";
+import Bookings from "../pages/admin/Bookings";
+
+import CustomerMovies from "../pages/customer/Movies";
+import MyBookings from "../pages/customer/MyBookings";
 
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRoute from "./RoleRoute";
@@ -43,6 +49,21 @@ function AppRoutes() {
                                 element={<AdminDashboard />}
                             />
 
+                            <Route
+                                path="/admin/users"
+                                element={<Users />}
+                            />
+
+                            <Route
+                                path="/admin/movies"
+                                element={<Movies />}
+                            />
+
+                            <Route
+                                path="/admin/bookings"
+                                element={<Bookings />}
+                            />
+
                         </Route>
 
                     </Route>
@@ -52,8 +73,13 @@ function AppRoutes() {
                         <Route element={<CustomerLayout />}>
 
                             <Route
-                                path="/customer"
-                                element={<CustomerDashboard />}
+                                path="/customer/movies"
+                                element={<CustomerMovies />}
+                            />
+
+                            <Route
+                                path="/customer/bookings"
+                                element={<MyBookings />}
                             />
 
                         </Route>

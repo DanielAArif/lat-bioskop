@@ -108,6 +108,34 @@ export const updateStatus = async (req, res) => {
     }
 };
 
+export const cancel = async (req, res) => {
+
+    try {
+
+        const result =
+            await bookingService.cancelBooking(
+                req.params.id,
+                req.user.id_user
+            );
+
+        return successResponse(
+            res,
+            "Booking berhasil dibatalkan",
+            result
+        );
+
+    } catch (error) {
+
+        return errorResponse(
+            res,
+            error.message,
+            error.statusCode || 500
+        );
+
+    }
+
+};
+
 export const destroy = async (req, res) => {
     try {
         await bookingService.removeBooking(

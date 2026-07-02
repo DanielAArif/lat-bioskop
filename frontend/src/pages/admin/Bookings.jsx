@@ -1,11 +1,11 @@
-function Dashboard() {
+function Bookings() {
 
     return (
 
         <div>
 
             <h1 className="text-3xl font-bold">
-                Dashboard Customer
+                Bookings
             </h1>
 
         </div>
@@ -13,4 +13,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default Bookings;
