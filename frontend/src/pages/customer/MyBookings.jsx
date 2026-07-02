@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import {
     getMyBookings,
-    deleteBooking
+    cancelBooking
 } from "../../services/bookingService";
 
 import BookingTable from "../../components/booking/BookingTable";

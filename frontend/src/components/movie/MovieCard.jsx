@@ -1,49 +1,53 @@
+import { Clock, Tag } from "lucide-react"; // Menggunakan ikon minimalis sebagai pengganti visual
+
 function MovieCard({ movie, onBooking }) {
-
     return (
-
-        <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
-
-            <div className="h-60 bg-slate-200 flex items-center justify-center">
-
-                <span className="text-gray-500">
-                    Poster
-                </span>
-
-            </div>
-
-            <div className="p-5">
-
-                <h2 className="text-xl font-bold">
+        // Card wrapper: Putih bersih, tanpa shadow tebal, menggunakan border halus
+        <div className="bg-white rounded border border-gray-100 shadow-sm hover:border-gray-300 hover:shadow-md transition-all duration-200 p-6 flex flex-col justify-between min-h-[220px]">
+            
+            {/* Bagian Atas: Informasi Konten Film */}
+            <div>
+                {/* Judul Film: Hitam pekat, tegas */}
+                <h2 className="text-base font-semibold text-gray-900 tracking-tight leading-snug line-clamp-2">
                     {movie.judul}
                 </h2>
 
-                <p className="text-gray-500 mt-2">
-                    Genre : {movie.genre}
-                </p>
+                {/* Metadata Film: Menggunakan layout baris tipis dan ikon abu-abu halus */}
+                <div className="mt-3 space-y-1.5 text-xs text-gray-400 font-medium">
+                    <div className="flex items-center gap-1.5">
+                        <Tag size={13} className="text-gray-300" />
+                        <span>{movie.genre}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <Clock size={13} className="text-gray-300" />
+                        <span>{movie.durasi} Menit</span>
+                    </div>
+                </div>
+            </div>
 
-                <p className="text-gray-500">
-                    Durasi : {movie.durasi} menit
-                </p>
+            {/* Bagian Bawah: Harga & Tombol Aksi */}
+            <div className="mt-5 pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
+                {/* Komponen Harga */}
+                <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-300">
+                        Harga Tiket
+                    </span>
+                    <span className="text-sm font-semibold text-gray-950">
+                        Rp {Number(movie.harga_tiket).toLocaleString("id-ID")}
+                    </span>
+                </div>
 
-                <p className="text-blue-600 font-bold text-lg mt-3">
-                    Rp{" "}
-                    {Number(movie.harga_tiket).toLocaleString("id-ID")}
-                </p>
-
+                {/* Tombol Booking: Hitam solid minimalis */}
                 <button
                     onClick={() => onBooking(movie)}
-                    className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                    className="bg-gray-950 hover:bg-gray-800 text-white text-xs font-medium px-4 py-2 rounded transition-colors shadow-sm"
                 >
-                    Booking
+                    Tiket
                 </button>
-
             </div>
 
         </div>
-
     );
-
 }
 
 export default MovieCard;

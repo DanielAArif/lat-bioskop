@@ -1,19 +1,9 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { createMovie, updateMovie } from "../../services/movieService";
 
-import {
-    createMovie,
-    updateMovie
-} from "../../services/movieService";
-
-function MovieModal({
-    isOpen,
-    onClose,
-    onSuccess,
-    movie
-}) {
-
+function MovieModal({ isOpen, onClose, onSuccess, movie }) {
     const {
         register,
         handleSubmit,
@@ -22,7 +12,6 @@ function MovieModal({
     } = useForm();
 
     useEffect(() => {
-
         if (movie) {
             reset(movie);
         } else {
@@ -33,166 +22,136 @@ function MovieModal({
                 harga_tiket: ""
             });
         }
-
     }, [movie, reset]);
 
     const onSubmit = async (data) => {
-
         try {
-
             if (movie) {
-
-                await updateMovie(
-                    movie.id_movie,
-                    data
-                );
-
-                toast.success(
-                    "Movie berhasil diperbarui"
-                );
-
+                await updateMovie(movie.id_movie, data);
+                toast.success("Film berhasil diperbarui");
             } else {
-
                 await createMovie(data);
-
-                toast.success(
-                    "Movie berhasil ditambahkan"
-                );
-
+                toast.success("Film baru berhasil ditambahkan");
             }
-
             onSuccess();
             onClose();
-
         } catch (error) {
-
             toast.error(
-                error.response?.data?.message ||
-                "Terjadi kesalahan"
+                error.response?.data?.message || "Terjadi kesalahan"
             );
-
         }
-
     };
 
     if (!isOpen) return null;
 
     return (
+        <div className="fixed inset-0 bg-gray-900/30 backdrop-blur-[2px] flex justify-center items-center z-50">
+            {/* Box Utama: Minimalis, Border halus, tanpa bayangan warna-warni */}
+            <div className="bg-white rounded-lg border border-gray-100 shadow-xl w-full max-w-md p-6 transform transition-all">
+                
+                {/* Header: Judul bersih & tombol close tipis */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
+                        {movie ? "Edit Data Film" : "Tambah Film Baru"}
+                    </h2>
+                    <button 
+                        onClick={onClose} 
+                        className="text-gray-400 hover:text-gray-600 transition-colors text-xl font-light"
+                    >
+                        &times;
+                    </button>
+                </div>
 
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-
-            <div className="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
-
-                <h2 className="text-2xl font-bold mb-6">
-
-                    {
-                        movie
-                            ? "Edit Movie"
-                            : "Tambah Movie"
-                    }
-
-                </h2>
-
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-4"
-                >
-
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    {/* Input Judul */}
                     <div>
-
-                        <label>Judul</label>
-
+                        <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                            Judul Film
+                        </label>
                         <input
                             type="text"
-                            className="w-full border rounded-lg p-2 mt-1"
-                            {...register("judul", {
-                                required: "Judul wajib diisi"
-                            })}
+                            placeholder="Masukkan judul film"
+                            className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors placeholder-gray-300"
+                            {...register("judul", { required: "Judul wajib diisi" })}
                         />
-
-                        <small className="text-red-500">
-                            {errors.judul?.message}
-                        </small>
-
+                        {errors.judul && (
+                            <span className="text-xs text-red-500 mt-1 block">{errors.judul.message}</span>
+                        )}
                     </div>
 
+                    {/* Input Genre */}
                     <div>
-
-                        <label>Genre</label>
-
+                        <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                            Genre
+                        </label>
                         <input
                             type="text"
-                            className="w-full border rounded-lg p-2 mt-1"
-                            {...register("genre", {
-                                required: "Genre wajib diisi"
-                            })}
+                            placeholder="Contoh: Aksi, Drama, Horor"
+                            className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors placeholder-gray-300"
+                            {...register("genre", { required: "Genre wajib diisi" })}
                         />
-
-                        <small className="text-red-500">
-                            {errors.genre?.message}
-                        </small>
-
+                        {errors.genre && (
+                            <span className="text-xs text-red-500 mt-1 block">{errors.genre.message}</span>
+                        )}
                     </div>
 
+                    {/* Input Durasi */}
                     <div>
-
-                        <label>Durasi (Menit)</label>
-
+                        <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                            Durasi (Menit)
+                        </label>
                         <input
                             type="number"
-                            className="w-full border rounded-lg p-2 mt-1"
-                            {...register("durasi", {
+                            placeholder="0"
+                            className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors placeholder-gray-300"
+                            {...register("durasi", { 
                                 required: "Durasi wajib diisi",
-                                min: 1
+                                min: { value: 1, message: "Durasi minimal 1 menit" }
                             })}
                         />
-
+                        {errors.durasi && (
+                            <span className="text-xs text-red-500 mt-1 block">{errors.durasi.message}</span>
+                        )}
                     </div>
 
+                    {/* Input Harga Tiket */}
                     <div>
-
-                        <label>Harga Tiket</label>
-
+                        <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                            Harga Tiket (IDR)
+                        </label>
                         <input
                             type="number"
-                            className="w-full border rounded-lg p-2 mt-1"
-                            {...register("harga_tiket", {
+                            placeholder="Rp 0"
+                            className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors placeholder-gray-300"
+                            {...register("harga_tiket", { 
                                 required: "Harga tiket wajib diisi",
-                                min: 1
+                                min: { value: 1, message: "Harga tidak boleh kosong" }
                             })}
                         />
-
+                        {errors.harga_tiket && (
+                            <span className="text-xs text-red-500 mt-1 block">{errors.harga_tiket.message}</span>
+                        )}
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-4">
-
+                    {/* Footer Tombol Aksi */}
+                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-5 py-2 rounded bg-gray-400 text-white"
+                            className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
                         >
                             Batal
                         </button>
-
                         <button
                             type="submit"
-                            className="px-5 py-2 rounded bg-blue-600 text-white"
+                            className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2 rounded text-sm font-medium transition-colors shadow-sm"
                         >
-                            {
-                                movie
-                                    ? "Update"
-                                    : "Simpan"
-                            }
+                            {movie ? "Perbarui" : "Simpan Film"}
                         </button>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
-
     );
 }
 

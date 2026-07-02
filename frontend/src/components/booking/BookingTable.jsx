@@ -1,110 +1,101 @@
+import { XCircle } from "lucide-react";
+
 function BookingTable({ bookings, onDelete }) {
+    // Fungsi pembantu lencana status dengan variasi warna teks minimalis yang lembut
     const getStatusBadge = (status) => {
         switch (status) {
             case "pending":
                 return (
-                    <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center bg-amber-50 text-amber-700 px-2.5 py-1 rounded text-xs font-medium border border-amber-100/60">
                         Pending
                     </span>
                 );
-
             case "sukses":
                 return (
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded text-xs font-medium border border-emerald-100/60">
                         Sukses
                     </span>
                 );
-
             case "dibatalkan":
                 return (
-                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-flex items-center bg-gray-50 text-gray-400 px-2.5 py-1 rounded text-xs font-medium border border-gray-100">
                         Dibatalkan
                     </span>
                 );
-
             default:
-                return status;
+                return <span className="text-xs text-gray-500 font-medium">{status}</span>;
         }
     };
 
     return (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
-
-            <table className="w-full">
-
-                <thead className="bg-slate-800 text-white">
-
+        <div className="overflow-x-auto bg-white rounded border border-gray-100 shadow-sm">
+            <table className="w-full text-left border-collapse">
+                {/* Header: Putih keabu-abuan bersih dengan teks kapital kecil */}
+                <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                        <th className="p-3 text-left">ID</th>
-                        <th className="p-3 text-left">Movie</th>
-                        <th className="p-3 text-center">Jumlah</th>
-                        <th className="p-3 text-center">Total</th>
-                        <th className="p-3 text-center">Status</th>
-                        <th className="p-3 text-center">Aksi</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">ID</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Movie</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Jumlah</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Total</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Status</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Aksi</th>
                     </tr>
-
                 </thead>
-
-                <tbody>
-
-                    {bookings.map((booking) => (
-
-                        <tr
-                            key={booking.id_booking}
-                            className="border-b"
-                        >
-
-                            <td className="p-3">
-                                {booking.id_booking}
+                <tbody className="divide-y divide-gray-100 bg-white">
+                    {bookings.length === 0 ? (
+                        <tr>
+                            <td colSpan="6" className="px-6 py-8 text-center text-sm text-gray-400">
+                                Tidak ada data riwayat booking.
                             </td>
-
-                            <td className="p-3">
-                                {booking.judul}
-                            </td>
-
-                            <td className="text-center">
-                                {booking.jumlah_tiket}
-                            </td>
-
-                            <td className="text-center">
-                                Rp{" "}
-                                {Number(
-                                    booking.total_harga
-                                ).toLocaleString("id-ID")}
-                            </td>
-
-                            <td className="text-center">
-                                {getStatusBadge(
-                                    booking.status_booking
-                                )}
-                            </td>
-
-                            <td className="text-center">
-
-                                {
-                                    booking.status_booking ===
-                                        "pending" && (
-
+                        </tr>
+                    ) : (
+                        bookings.map((booking) => (
+                            <tr key={booking.id_booking} className="hover:bg-gray-50/60 transition-colors">
+                                {/* ID Booking */}
+                                <td className="px-6 py-4 text-sm font-mono text-gray-500 whitespace-nowrap">
+                                    {booking.id_booking}
+                                </td>
+                                
+                                {/* Judul Film */}
+                                <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                    {booking.judul}
+                                </td>
+                                
+                                {/* Jumlah Tiket */}
+                                <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                                    {booking.jumlah_tiket}
+                                </td>
+                                
+                                {/* Total Harga */}
+                                <td className="px-6 py-4 text-sm font-semibold text-gray-900 whitespace-nowrap text-center">
+                                    Rp {Number(booking.total_harga).toLocaleString("id-ID")}
+                                </td>
+                                
+                                {/* Status Badge */}
+                                <td className="px-6 py-4 text-sm whitespace-nowrap text-center">
+                                    {getStatusBadge(booking.status_booking)}
+                                </td>
+                                
+                                {/* Tombol Batalkan Transaksi */}
+                                <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-center">
+                                    {booking.status_booking === "pending" ? (
                                         <button
                                             onClick={() => onDelete(booking)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                                            className="text-red-600 hover:text-red-900 inline-flex items-center gap-1 transition-colors group"
+                                            title="Batalkan Booking"
                                         >
-                                            Batalkan
+                                            <XCircle size={14} className="group-hover:scale-105 transition-transform" />
+                                            <span>Batalkan</span>
                                         </button>
-
-                                    )
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    ))}
-
+                                    ) : (
+                                        <span className="text-xs text-gray-300 font-normal">-</span>
+                                    )}
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
-
             </table>
-
         </div>
     );
 }
